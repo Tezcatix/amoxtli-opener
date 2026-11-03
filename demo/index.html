@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>amoxtli-opener · demo</title>
+<style>
+  [hidden]{display:none!important}
+  html,body{margin:0;min-height:100%;background:#0f1026;font-family:system-ui,sans-serif;color:#fff}
+  button{font:inherit}
+
+  /* Sitio anfitrión de mentira: lo que rodea a la librería en una web o app real. */
+  #home{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
+  #home header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  #home h1{margin:0;font-size:22px}
+  #home h2{margin:36px 0 12px;font-size:16px;opacity:.85}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+  .stat{padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.08);font-size:14px}
+  .stat b{font-size:16px}
+  .cta{padding:12px 22px;border:0;border-radius:999px;background:#8b7bff;color:#fff;font-weight:600;cursor:pointer}
+  .cta:disabled{opacity:.4;cursor:default}
+  .ghost{padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:none;color:#fff;cursor:pointer}
+  .empty{padding:28px;border-radius:14px;border:1px dashed rgba(255,255,255,.2);text-align:center;opacity:.8;font-size:14px}
+  #collection{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px}
+  #collection figure{margin:0;position:relative}
+  #collection img{width:100%;display:block;border-radius:8px;box-shadow:0 0 0 2px var(--c,#555)}
+  #collection figcaption{font-size:11px;margin-top:4px;opacity:.8;text-align:center}
+  #toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:40;padding:12px 20px;border-radius:999px;background:#1f9d62;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:opacity .4s}
+
+  /* El opener ocupa toda la pantalla mientras está abierto. */
+  #overlay{position:fixed;inset:0;z-index:20;background:#0f1026}
+  #mount{position:absolute;inset:0}
+
+  /* Solo con ?debug */
+  #controls{position:fixed;z-index:30;top:8px;left:8px;right:8px;display:flex;gap:8px;flex-wrap:wrap;font-size:13px;align-items:center}
+  #controls select,#controls button{font:inherit;padding:4px 8px}
+  #log{position:fixed;z-index:30;bottom:6px;left:8px;font:11px monospace;opacity:.7;max-width:90vw;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<main id="home">
+  <header>
+    <h1>Amoxtli · Mis sobres</h1>
+    <button class="ghost" id="reset">Restablecer demo</button>
+  </header>
+  <div class="stats">
+    <span class="stat"><b id="packsLeft">0</b> sobres sin abrir</span>
+    <span class="stat"><b id="cardsOwned">0</b> cartas en tu colección</span>
+  </div>
+  <button class="cta" id="openPacks">Abrir sobres</button>
+  <div class="empty" id="noPacks" hidden>No te quedan sobres sin abrir. Vuelve pronto o restablece la demo.</div>
+
+  <h2>Tu colección</h2>
+  <div class="empty" id="noCards">Todavía no tienes cartas. Abre un sobre para empezar.</div>
+  <div id="collection"></div>
+</main>
+
+<div id="overlay" hidden>
+  <div id="mount"></div>
+</div>
+<div id="toast" hidden></div>
+
+<div id="controls" hidden>
+  <label>Sobres
+    <select id="count"></select>
+  </label>
+  <label>Selección
+    <select id="select3d"><option value="3d">carrusel 3D</option><option value="2d">estante 2D</option></select>
+  </label>
+  <label>Rasgado
+    <select id="tear"><option value="swipe">trazo libre</option><option value="tap">toque</option><option value="auto">auto</option></select>
+  </label>
+  <label>Revelado
+    <select id="reveal"><option value="tap-through">tocar</option><option value="auto-advance">automático</option><option value="all-at-once">todas</option></select>
+  </label>
+  <label>Perfil
+    <select id="profile"><option value="auto">auto</option><option value="high">high</option><option value="low">low</option></select>
+  </label>
+  <label>Colores
+    <select id="colors"><option value="image">de la imagen</option><option value="manual">manual</option></select>
+  </label>
+  <label><input type="checkbox" id="mute"> silencio</label>
+  <label><input type="checkbox" id="flaky"> primer intento falla</label>
+</div>
+<div id="log" hidden></div>
+
+<!--
+  El carrusel 3D usa three.js desde node_modules (npm install) y necesita WebGL.
+  Requiere: node demo/make-data.mjs (datos falsos) + npm run build (dist/ y dist-examples/),
+  y servir la carpeta por HTTP (fetch no funciona con file://), p. ej.: npx http-server . -p 5173
+  Versión limpia: demo/index.html · Controles de prueba, log y textos de ayuda: demo/index.html?debug
+-->
+<script src="../dist/amoxtli-opener.global.js"></script>
+<script src="../dist-examples/amoxtli-preset.global.js"></script>
+<script type="module">
+  import * as THREE from '../node_modules/three/build/three.module.js';
+  const { createPackOpener, FEATURES } = AmoxtliOpener;
+  const { amoxtliPreset } = AmoxtliPreset;
+  const preset = amoxtliPreset('../examples/amoxtli/assets');
+
+  const $ = (id) => document.getElementById(id);
+  const debug = new URLSearchParams(location.search).has('debug');
+  $('controls').hidden = !debug;
+  $('log').hidden = !debug;
+  const log = (t) => { $('log').textContent = t; };
+
+  // De 1 a 20 sobres (los datos falsos traen 20). Con 1 no hay selección: se abre directo.
+  for (let n = 1; n <= 20; n++) {
+    const option = document.createElement('option');
+    option.value = String(n);
+    option.textContent = n === 1 ? '1 (sin selección)' : String(n);
+    $('count').appendChild(option);
+  }
+  $('count').value = '5';
+
+  /**
+   * Servidor simulado. Hace lo que haría el endpoint real:
+   *  - las cartas solo salen de aquí cuando se canjea el código (nunca viajan con la página);
+   *  - canjear marca el sobre como abierto y es idempotente: repetir el código devuelve las mismas cartas;
+   *  - un código desconocido falla.
+   */
+  const fakeServer = (() => {
+    const KEY = 'amoxtli-opener-demo:opened';
+    let db = null;
+    const opened = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    return {
+      async load() { db = (await (await fetch('data/packs.json')).json()).packs; },
+      /** Inventario: lo que el servidor le muestra a la persona (sin cartas). */
+      inventory: () => Object.entries(db).map(([code, p]) => ({ code, label: p.label, accent: p.accent, opened: opened.has(code) })),
+      reset() { opened.clear(); localStorage.removeItem(KEY); },
+      async redeem(code, { signal } = {}) {
+        await wait(700);
+        if (signal?.aborted) throw new DOMException('aborted', 'AbortError');
+        const pack = db[code];
+        if (!pack) throw new Error('Código inválido');
+        opened.add(code);
+        localStorage.setItem(KEY, JSON.stringify([...opened]));
+        return { packId: code, cards: pack.cards };
+      },
+    };
+  })();
+
+  /** Colección de la persona: en una app real vive en el servidor; aquí en localStorage. */
+  const collection = (() => {
+    const KEY = 'amoxtli-opener-demo:collection';
+    let cards = JSON.parse(localStorage.getItem(KEY) || '[]');
+    return {
+      all: () => cards,
+      add(list) {
+        const known = new Set(cards.map((c) => c.id));
+        const fresh = list.filter((c) => !known.has(c.id));
+        cards = [...cards, ...list.filter((c, i) => !known.has(c.id) && list.findIndex((o) => o.id === c.id) === i)];
+        localStorage.setItem(KEY, JSON.stringify(cards));
+        return fresh.length;
+      },
+      reset() { cards = []; localStorage.removeItem(KEY); },
+    };
+  })();
+
+  const unopened = () => fakeServer.inventory().filter((p) => !p.opened);
+
+  let toastTimer;
+  function toast(text) {
+    $('toast').textContent = text;
+    $('toast').hidden = false;
+    $('toast').style.opacity = '1';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { $('toast').style.opacity = '0'; setTimeout(() => { $('toast').hidden = true; }, 400); }, 3200);
+  }
+
+  /** Pantalla de inicio: contadores, botón de abrir y la colección. */
+  function renderHome() {
+    const left = unopened().length;
+    const cards = collection.all();
+    $('packsLeft').textContent = String(left);
+    $('cardsOwned').textContent = String(cards.length);
+    $('openPacks').disabled = left === 0;
+    $('noPacks').hidden = left !== 0;
+    $('noCards').hidden = cards.length !== 0;
+    $('collection').replaceChildren(...cards.map((c) => {
+      const figure = document.createElement('figure');
+      const img = document.createElement('img');
+      img.src = c.image;
+      img.alt = c.name ?? c.id;
+      img.loading = 'lazy';
+      const caption = document.createElement('figcaption');
+      caption.textContent = c.name ?? c.id;
+      figure.append(img, caption);
+      return figure;
+    }));
+  }
+
+  let opener;
+  let running = false;
+  async function run() {
+    if (running) { return; }
+    running = true;
+    opener?.destroy();
+    const available = unopened().slice(0, Number($('count').value));
+    if (available.length === 0) { running = false; renderHome(); log('No quedan sobres sin abrir.'); return; }
+    $('overlay').hidden = false;
+    document.body.style.overflow = 'hidden';
+    let failNext = $('flaky').checked;
+    // Sobres que quedarán tras elegir uno: sirve para ofrecer «Abrir otro (n)» solo si hay.
+    const remaining = unopened().length - 1;
+    opener = createPackOpener({
+      mount: $('mount'),
+      // Con varios sobres se muestran todos y la persona elige; con uno se abre directo.
+      ...(available.length > 1
+        ? { three: $('select3d').value === '3d' ? THREE : undefined, packs: available.map((p) => ({ code: p.code, id: p.code, caption: p.label, accent: p.accent, badge: /holo/i.test(p.label) ? 'Holo' : undefined })) }
+        : { code: available[0].code, pack: { ...preset.pack, id: available[0].code, accent: available[0].accent } }),
+      redeem: async (c, ctx) => {
+        if (failNext) { failNext = false; await new Promise((r) => setTimeout(r, 500)); throw new Error('Servidor no disponible'); }
+        return fakeServer.redeem(c, ctx);
+      },
+      ...preset,
+      flow: { tearMode: $('tear').value, revealMode: $('reveal').value },
+      effects: { profile: $('profile').value, colorSource: $('colors').value },
+      ui: { hints: debug, counter: debug },
+      audio: { enabled: !$('mute').checked, volume: 0.7 },
+      actions: [
+        { id: 'collect', label: preset.labels.collect, primary: true },
+        ...(remaining > 0 ? [{ id: 'again', label: `Abrir otro (${remaining})` }] : []),
+      ],
+      on: { warning: (w) => log('warning: ' + w.message) },
+    });
+    const mine = opener;
+    const result = await mine.open();
+    if (opener !== mine) { return; }
+    log(`${result.outcome} · acción=${result.actionId} · mejor=${result.bestPull?.card.name} (${result.bestPull?.card.rarity}, tier ${result.bestPull?.tier}) · ${result.durationMs}ms`);
+    running = false;
+
+    // Las cartas ya salieron del servidor (el sobre quedó abierto): se guardan salvo que haya fallado.
+    if (result.outcome !== 'failed' && result.cards.length > 0) {
+      const added = collection.add(result.cards.map((r) => r.card));
+      toast(`${result.cards.length} cartas en tu colección${added > 0 ? ` · ${added} nuevas` : ''}`);
+    }
+    if (result.actionId === 'again') { run(); return; }
+    $('overlay').hidden = true;
+    document.body.style.overflow = '';
+    mine.destroy();
+    renderHome();
+  }
+
+  $('openPacks').onclick = run;
+  $('reset').onclick = () => { fakeServer.reset(); collection.reset(); renderHome(); log('Demo restablecida'); };
+  ['count', 'select3d', 'tear', 'reveal', 'profile', 'colors', 'mute', 'flaky'].forEach((id) => { $(id).onchange = () => { if (!$('overlay').hidden) { running = false; run(); } }; });
+  fakeServer.load().then(() => { renderHome(); log('build: ' + (FEATURES ? FEATURES.join(' · ') : 'ANTIGUO: ejecuta npm run build y recarga con Ctrl+F5')); }).catch((e) => log('No se pudo cargar data/packs.json: ' + e.message));
+</script>
+</body>
+</html>
