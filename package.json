@@ -1,0 +1,64 @@
+{
+  "name": "amoxtli-opener",
+  "version": "0.0.1",
+  "description": "Interactive Pack Opening Engine: configurable tear → reveal → summary experience for virtual packs.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tezcatix/amoxtli-opener.git"
+  },
+  "homepage": "https://github.com/Tezcatix/amoxtli-opener#readme",
+  "bugs": {
+    "url": "https://github.com/Tezcatix/amoxtli-opener/issues"
+  },
+  "keywords": [
+    "pack-opening",
+    "card-pack",
+    "booster",
+    "trading-cards",
+    "animation",
+    "threejs"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "unpkg": "./dist/amoxtli-opener.global.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "demo:data": "node demo/make-data.mjs",
+    "demo": "npm run build && npx --yes http-server . -p 5173 -c-1 -o /demo/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "peerDependencies": {
+    "three": ">=0.160.0"
+  },
+  "peerDependenciesMeta": {
+    "three": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "happy-dom": "^21.0.4",
+    "three": "^0.187.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
