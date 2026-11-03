@@ -1,0 +1,1324 @@
+{
+  "packs": {
+    "AMX-DEMO-0001": {
+      "label": "Sobre básico",
+      "accent": "#8b7bff",
+      "cards": [
+        {
+          "id": "demo-001",
+          "name": "Ajolote de cristal",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-001.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-002",
+          "name": "Colibrí solar",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-002.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-003",
+          "name": "Jaguar de obsidiana",
+          "rarity": "Common",
+          "isNew": true,
+          "image": "data/cards/demo-003.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-004",
+          "name": "Serpiente emplumada",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-004.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-005",
+          "name": "Xoloitzcuintle",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-005.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-006",
+          "name": "Quetzal eléctrico",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-006.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0002": {
+      "label": "Con holo",
+      "accent": "#4ade80",
+      "cards": [
+        {
+          "id": "demo-007",
+          "name": "Nopal guardián",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-007.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-008",
+          "name": "Coyote lunar",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-008.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-009",
+          "name": "Mariposa monarca",
+          "rarity": "Uncommon",
+          "isNew": true,
+          "image": "data/cards/demo-009.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-010",
+          "name": "Tlaloc menor",
+          "rarity": "Rare",
+          "isNew": false,
+          "image": "data/cards/demo-010.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-011",
+          "name": "Venado de jade",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-011.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-012",
+          "name": "Águila del alba",
+          "rarity": "Double Rare",
+          "isNew": true,
+          "image": "data/cards/demo-012.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0003": {
+      "label": "Ultra",
+      "accent": "#a78bfa",
+      "cards": [
+        {
+          "id": "demo-013",
+          "name": "Tortuga de río",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-013.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-014",
+          "name": "Zorro de ceniza",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-014.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-015",
+          "name": "Cacomixtle",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-015.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-016",
+          "name": "Lagarto de fuego",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-016.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-017",
+          "name": "Murciélago de cueva",
+          "rarity": "Ultra Rare",
+          "isNew": false,
+          "image": "data/cards/demo-017.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-018",
+          "name": "Mono araña",
+          "rarity": "Illustration Rare",
+          "isNew": true,
+          "image": "data/cards/demo-018.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0004": {
+      "label": "Ilustración especial",
+      "accent": "#ffc83d",
+      "cards": [
+        {
+          "id": "demo-019",
+          "name": "Tucán de selva",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-019.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-020",
+          "name": "Pez luna",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-020.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-021",
+          "name": "Oso hormiguero",
+          "rarity": "Uncommon",
+          "isNew": true,
+          "image": "data/cards/demo-021.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-022",
+          "name": "Tapir sabio",
+          "rarity": "Rare",
+          "isNew": false,
+          "image": "data/cards/demo-022.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-023",
+          "name": "Rana de lluvia",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-023.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-024",
+          "name": "Búho de templo",
+          "rarity": "Special Illustration Rare",
+          "isNew": true,
+          "image": "data/cards/demo-024.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0005": {
+      "label": "Hiper",
+      "accent": "#fff3c4",
+      "cards": [
+        {
+          "id": "demo-025",
+          "name": "Armadillo de bronce",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-025.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-026",
+          "name": "Cenzontle",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-026.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-027",
+          "name": "Tlacuache",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-027.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-028",
+          "name": "Gavilán rojo",
+          "rarity": "Ultra Rare",
+          "isNew": false,
+          "image": "data/cards/demo-028.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-029",
+          "name": "Cangrejo de coral",
+          "rarity": "Illustration Rare",
+          "isNew": false,
+          "image": "data/cards/demo-029.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-030",
+          "name": "Iguana de roca",
+          "rarity": "Hyper Rare",
+          "isNew": true,
+          "image": "data/cards/demo-030.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0006": {
+      "label": "Sobre básico #6",
+      "accent": "#8b7bff",
+      "cards": [
+        {
+          "id": "demo-031",
+          "name": "Ajolote de cristal",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-031.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-032",
+          "name": "Colibrí solar",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-032.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-033",
+          "name": "Jaguar de obsidiana",
+          "rarity": "Common",
+          "isNew": true,
+          "image": "data/cards/demo-033.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-034",
+          "name": "Serpiente emplumada",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-034.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-035",
+          "name": "Xoloitzcuintle",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-035.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-036",
+          "name": "Quetzal eléctrico",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-036.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0007": {
+      "label": "Con holo #7",
+      "accent": "#4ade80",
+      "cards": [
+        {
+          "id": "demo-037",
+          "name": "Nopal guardián",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-037.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-038",
+          "name": "Coyote lunar",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-038.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-039",
+          "name": "Mariposa monarca",
+          "rarity": "Uncommon",
+          "isNew": true,
+          "image": "data/cards/demo-039.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-040",
+          "name": "Tlaloc menor",
+          "rarity": "Rare",
+          "isNew": false,
+          "image": "data/cards/demo-040.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-041",
+          "name": "Venado de jade",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-041.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-042",
+          "name": "Águila del alba",
+          "rarity": "Double Rare",
+          "isNew": true,
+          "image": "data/cards/demo-042.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0008": {
+      "label": "Ultra #8",
+      "accent": "#a78bfa",
+      "cards": [
+        {
+          "id": "demo-043",
+          "name": "Tortuga de río",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-043.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-044",
+          "name": "Zorro de ceniza",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-044.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-045",
+          "name": "Cacomixtle",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-045.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-046",
+          "name": "Lagarto de fuego",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-046.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-047",
+          "name": "Murciélago de cueva",
+          "rarity": "Ultra Rare",
+          "isNew": false,
+          "image": "data/cards/demo-047.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-048",
+          "name": "Mono araña",
+          "rarity": "Illustration Rare",
+          "isNew": true,
+          "image": "data/cards/demo-048.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0009": {
+      "label": "Ilustración especial #9",
+      "accent": "#ffc83d",
+      "cards": [
+        {
+          "id": "demo-049",
+          "name": "Tucán de selva",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-049.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-050",
+          "name": "Pez luna",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-050.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-051",
+          "name": "Oso hormiguero",
+          "rarity": "Uncommon",
+          "isNew": true,
+          "image": "data/cards/demo-051.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-052",
+          "name": "Tapir sabio",
+          "rarity": "Rare",
+          "isNew": false,
+          "image": "data/cards/demo-052.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-053",
+          "name": "Rana de lluvia",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-053.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-054",
+          "name": "Búho de templo",
+          "rarity": "Special Illustration Rare",
+          "isNew": true,
+          "image": "data/cards/demo-054.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0010": {
+      "label": "Hiper #10",
+      "accent": "#fff3c4",
+      "cards": [
+        {
+          "id": "demo-055",
+          "name": "Armadillo de bronce",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-055.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-056",
+          "name": "Cenzontle",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-056.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-057",
+          "name": "Tlacuache",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-057.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-058",
+          "name": "Gavilán rojo",
+          "rarity": "Ultra Rare",
+          "isNew": false,
+          "image": "data/cards/demo-058.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-059",
+          "name": "Cangrejo de coral",
+          "rarity": "Illustration Rare",
+          "isNew": false,
+          "image": "data/cards/demo-059.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-060",
+          "name": "Iguana de roca",
+          "rarity": "Hyper Rare",
+          "isNew": true,
+          "image": "data/cards/demo-060.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0011": {
+      "label": "Sobre básico #11",
+      "accent": "#8b7bff",
+      "cards": [
+        {
+          "id": "demo-061",
+          "name": "Ajolote de cristal",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-061.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-062",
+          "name": "Colibrí solar",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-062.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-063",
+          "name": "Jaguar de obsidiana",
+          "rarity": "Common",
+          "isNew": true,
+          "image": "data/cards/demo-063.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-064",
+          "name": "Serpiente emplumada",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-064.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-065",
+          "name": "Xoloitzcuintle",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-065.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-066",
+          "name": "Quetzal eléctrico",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-066.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0012": {
+      "label": "Con holo #12",
+      "accent": "#4ade80",
+      "cards": [
+        {
+          "id": "demo-067",
+          "name": "Nopal guardián",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-067.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-068",
+          "name": "Coyote lunar",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-068.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-069",
+          "name": "Mariposa monarca",
+          "rarity": "Uncommon",
+          "isNew": true,
+          "image": "data/cards/demo-069.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-070",
+          "name": "Tlaloc menor",
+          "rarity": "Rare",
+          "isNew": false,
+          "image": "data/cards/demo-070.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-071",
+          "name": "Venado de jade",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-071.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-072",
+          "name": "Águila del alba",
+          "rarity": "Double Rare",
+          "isNew": true,
+          "image": "data/cards/demo-072.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0013": {
+      "label": "Ultra #13",
+      "accent": "#a78bfa",
+      "cards": [
+        {
+          "id": "demo-073",
+          "name": "Tortuga de río",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-073.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-074",
+          "name": "Zorro de ceniza",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-074.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-075",
+          "name": "Cacomixtle",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-075.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-076",
+          "name": "Lagarto de fuego",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-076.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-077",
+          "name": "Murciélago de cueva",
+          "rarity": "Ultra Rare",
+          "isNew": false,
+          "image": "data/cards/demo-077.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-078",
+          "name": "Mono araña",
+          "rarity": "Illustration Rare",
+          "isNew": true,
+          "image": "data/cards/demo-078.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0014": {
+      "label": "Ilustración especial #14",
+      "accent": "#ffc83d",
+      "cards": [
+        {
+          "id": "demo-079",
+          "name": "Tucán de selva",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-079.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-080",
+          "name": "Pez luna",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-080.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-081",
+          "name": "Oso hormiguero",
+          "rarity": "Uncommon",
+          "isNew": true,
+          "image": "data/cards/demo-081.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-082",
+          "name": "Tapir sabio",
+          "rarity": "Rare",
+          "isNew": false,
+          "image": "data/cards/demo-082.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-083",
+          "name": "Rana de lluvia",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-083.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-084",
+          "name": "Búho de templo",
+          "rarity": "Special Illustration Rare",
+          "isNew": true,
+          "image": "data/cards/demo-084.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0015": {
+      "label": "Hiper #15",
+      "accent": "#fff3c4",
+      "cards": [
+        {
+          "id": "demo-085",
+          "name": "Armadillo de bronce",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-085.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-086",
+          "name": "Cenzontle",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-086.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-087",
+          "name": "Tlacuache",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-087.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-088",
+          "name": "Gavilán rojo",
+          "rarity": "Ultra Rare",
+          "isNew": false,
+          "image": "data/cards/demo-088.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-089",
+          "name": "Cangrejo de coral",
+          "rarity": "Illustration Rare",
+          "isNew": false,
+          "image": "data/cards/demo-089.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-090",
+          "name": "Iguana de roca",
+          "rarity": "Hyper Rare",
+          "isNew": true,
+          "image": "data/cards/demo-090.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0016": {
+      "label": "Sobre básico #16",
+      "accent": "#8b7bff",
+      "cards": [
+        {
+          "id": "demo-091",
+          "name": "Ajolote de cristal",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-091.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-092",
+          "name": "Colibrí solar",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-092.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-093",
+          "name": "Jaguar de obsidiana",
+          "rarity": "Common",
+          "isNew": true,
+          "image": "data/cards/demo-093.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-094",
+          "name": "Serpiente emplumada",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-094.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-095",
+          "name": "Xoloitzcuintle",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-095.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-096",
+          "name": "Quetzal eléctrico",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-096.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0017": {
+      "label": "Con holo #17",
+      "accent": "#4ade80",
+      "cards": [
+        {
+          "id": "demo-097",
+          "name": "Nopal guardián",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-097.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-098",
+          "name": "Coyote lunar",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-098.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-099",
+          "name": "Mariposa monarca",
+          "rarity": "Uncommon",
+          "isNew": true,
+          "image": "data/cards/demo-099.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-100",
+          "name": "Tlaloc menor",
+          "rarity": "Rare",
+          "isNew": false,
+          "image": "data/cards/demo-100.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-101",
+          "name": "Venado de jade",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-101.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-102",
+          "name": "Águila del alba",
+          "rarity": "Double Rare",
+          "isNew": true,
+          "image": "data/cards/demo-102.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0018": {
+      "label": "Ultra #18",
+      "accent": "#a78bfa",
+      "cards": [
+        {
+          "id": "demo-103",
+          "name": "Tortuga de río",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-103.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-104",
+          "name": "Zorro de ceniza",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-104.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-105",
+          "name": "Cacomixtle",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-105.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-106",
+          "name": "Lagarto de fuego",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-106.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-107",
+          "name": "Murciélago de cueva",
+          "rarity": "Ultra Rare",
+          "isNew": false,
+          "image": "data/cards/demo-107.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-108",
+          "name": "Mono araña",
+          "rarity": "Illustration Rare",
+          "isNew": true,
+          "image": "data/cards/demo-108.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0019": {
+      "label": "Ilustración especial #19",
+      "accent": "#ffc83d",
+      "cards": [
+        {
+          "id": "demo-109",
+          "name": "Tucán de selva",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-109.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-110",
+          "name": "Pez luna",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-110.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-111",
+          "name": "Oso hormiguero",
+          "rarity": "Uncommon",
+          "isNew": true,
+          "image": "data/cards/demo-111.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-112",
+          "name": "Tapir sabio",
+          "rarity": "Rare",
+          "isNew": false,
+          "image": "data/cards/demo-112.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-113",
+          "name": "Rana de lluvia",
+          "rarity": "Rare Holo",
+          "isNew": false,
+          "image": "data/cards/demo-113.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-114",
+          "name": "Búho de templo",
+          "rarity": "Special Illustration Rare",
+          "isNew": true,
+          "image": "data/cards/demo-114.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    },
+    "AMX-DEMO-0020": {
+      "label": "Hiper #20",
+      "accent": "#fff3c4",
+      "cards": [
+        {
+          "id": "demo-115",
+          "name": "Armadillo de bronce",
+          "rarity": "Common",
+          "isNew": false,
+          "image": "data/cards/demo-115.svg",
+          "meta": {
+            "slot": 0
+          }
+        },
+        {
+          "id": "demo-116",
+          "name": "Cenzontle",
+          "rarity": "Uncommon",
+          "isNew": false,
+          "image": "data/cards/demo-116.svg",
+          "meta": {
+            "slot": 1
+          }
+        },
+        {
+          "id": "demo-117",
+          "name": "Tlacuache",
+          "rarity": "Rare",
+          "isNew": true,
+          "image": "data/cards/demo-117.svg",
+          "meta": {
+            "slot": 2
+          }
+        },
+        {
+          "id": "demo-118",
+          "name": "Gavilán rojo",
+          "rarity": "Ultra Rare",
+          "isNew": false,
+          "image": "data/cards/demo-118.svg",
+          "meta": {
+            "slot": 3
+          }
+        },
+        {
+          "id": "demo-119",
+          "name": "Cangrejo de coral",
+          "rarity": "Illustration Rare",
+          "isNew": false,
+          "image": "data/cards/demo-119.svg",
+          "meta": {
+            "slot": 4
+          }
+        },
+        {
+          "id": "demo-120",
+          "name": "Iguana de roca",
+          "rarity": "Hyper Rare",
+          "isNew": true,
+          "image": "data/cards/demo-120.svg",
+          "meta": {
+            "slot": 5
+          }
+        }
+      ]
+    }
+  }
+}
