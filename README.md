@@ -74,6 +74,10 @@ npm run demo          # build + servidor local en /demo/
 
 [examples/amoxtli/](examples/amoxtli/) es el **ejemplo** de cómo personalizarla y a la vez los recursos reales que usa Amoxtli: tema, textos, rarezas (8 niveles que cubren las 45 del catálogo) y arte del sobre, la caja y el dorso. No se publica en el paquete. Ver [personalizacion.md](docs/personalizacion.md#preset-de-amoxtli).
 
+## Autor
+
+Creada y mantenida por [Zuriel Diaz Agustin](https://github.com/ZurielDA), de [Tezcatix](https://github.com/Tezcatix).
+
 ## Créditos y licencia
 
 Varios efectos están adaptados de [OpenPack](https://github.com/Luango/openpack) (Luango), con permiso del autor; ver [NOTICE.md](NOTICE.md). El resto es de esta librería, bajo licencia MIT ([LICENSE](LICENSE)).

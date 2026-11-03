@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Interactive Pack Opening Engine: configurable tear → reveal → summary experience for virtual packs.",
   "license": "MIT",
+  "author": {
+    "name": "Zuriel Diaz Agustin",
+    "url": "https://github.com/ZurielDA"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Tezcatix/amoxtli-opener.git"
