@@ -12,6 +12,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). L
 - **Documentación:** el borrador `docs/01-analisis-inputs-outputs.md` se reemplazó por la documentación nueva.
 
 ### Añadido
+- **Seguridad de la puerta de entrada:** los `links` con esquemas peligrosos (`javascript:`, `data:`…) se descartan, y un campo llamado `__proto__` ya no altera el prototipo de los valores. Nueva guía [docs/seguridad.md](docs/seguridad.md) con lo que la librería cubre, lo que debe validar el servidor y los riesgos que dependen de quien integra.
 - **Puerta de entrada, accesibilidad:** el título del formulario usa un `id` único por instancia (antes era fijo y se repetía con varios abridores); internamente `gate.ts` se separó en `buildHeader`, `buildField` y `runGate` sin cambiar el comportamiento.
 - **Botón «Salir» (`ui.exitButton`):** arriba a la izquierda y visible en todas las fases, también en la puerta de entrada y la selección; termina con `outcome: 'aborted'`. Nueva etiqueta `labels.exit` y método `opener.exit()`.
 - **`update({ actions })`:** reemplaza en caliente los botones del resumen (se leen al llegar a él), p. ej. para ofrecer «Abrir otro» solo si al servidor le quedan sobres.

@@ -58,6 +58,7 @@ Cada carta es, como mínimo, `{ id, image }`; con `rarity` (u otro dato que clas
 | [docs/referencia-api.md](docs/referencia-api.md) | Todas las opciones, tipos, métodos, eventos y resultado. |
 | [docs/arquitectura.md](docs/arquitectura.md) | Cómo está organizado el código y por qué. |
 | [docs/desarrollo.md](docs/desarrollo.md) | Scripts, pruebas, demo, CI y cómo extenderla. |
+| [docs/seguridad.md](docs/seguridad.md) | Qué protege la librería, qué debe validar tu servidor y los riesgos conocidos. |
 
 El índice completo está en [docs/README.md](docs/README.md). Qué cambió entre versiones: [CHANGELOG.md](CHANGELOG.md).
 

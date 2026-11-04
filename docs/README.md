@@ -9,6 +9,7 @@ Orden recomendado de lectura:
 5. **[Referencia de la API](referencia-api.md)**: la lista completa de opciones, tipos, métodos y eventos.
 6. **[Arquitectura](arquitectura.md)**: cómo está hecho por dentro.
 7. **[Desarrollo](desarrollo.md)**: para quien trabaja en la librería.
+8. **[Seguridad](seguridad.md)**: qué protege la librería y qué le toca a tu servidor.
 
 El historial de cambios está en [CHANGELOG.md](../CHANGELOG.md).
 

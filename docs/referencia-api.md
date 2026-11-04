@@ -67,7 +67,7 @@ Una **puerta de entrada**: un formulario que se muestra **antes** de la experien
 | `type` | `'text' \| 'email' \| 'tel' \| 'checkbox'` | Tipo del `<input>`. Def. `text`. Con `checkbox` es una casilla (por ejemplo, aceptar términos): su valor es `'true'` si está marcada y `''` si no. |
 | `required` | `boolean` | Si es obligatorio. Def. `true`. Una casilla obligatoria hay que marcarla. |
 | `requiredMessage` | `string` | Aviso cuando falta este campo; sustituye al `requiredMessage` general. |
-| `links` | `{ label, href }[]` | Enlaces junto a una casilla (términos, aviso de privacidad…); se abren en otra pestaña. |
+| `links` | `{ label, href }[]` | Enlaces junto a una casilla (términos, aviso de privacidad…); se abren en otra pestaña. Solo se pintan los de ruta relativa o con `http:`, `https:`, `mailto:` o `tel:`; el resto se descarta ([seguridad](seguridad.md)). |
 | `placeholder`, `help` | `string` | Texto de ejemplo y ayuda bajo el campo. |
 | `maxLength` | `number` | Largo máximo. |
 | `transform` | `'none' \| 'uppercase'` | `uppercase` pasa lo escrito a mayúsculas (útil para códigos). |
