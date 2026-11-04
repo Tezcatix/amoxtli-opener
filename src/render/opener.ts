@@ -22,6 +22,7 @@ import { createFeedback } from '../audio/controller';
 import { defaultLabels } from './labels';
 import { createCarousel3D } from './carousel3d';
 import type { Carousel3D, Carousel3DHandlers } from './carousel3d';
+import { assertValidCards } from './cards-guard';
 import { el } from './dom';
 import { runGate } from './gate';
 import type { GateHandle } from './gate';
@@ -391,7 +392,8 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
         if (destroyed) {
           return;
         }
-        const { cards, packId } = Array.isArray(response) ? { cards: response, packId: undefined } : response;
+        const { cards, packId } = Array.isArray(response) ? { cards: response, packId: undefined } : (response ?? {});
+        assertValidCards(cards);
         cards.forEach((card) => {
           const preload = doc.createElement('img');
           preload.src = card.thumb ?? card.image;
