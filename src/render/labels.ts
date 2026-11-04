@@ -6,6 +6,7 @@ import type { Labels } from '../types';
  */
 export const defaultLabels: Labels = {
   skip: 'Skip',
+  exit: 'Exit',
   swipeToOpen: 'Swipe across the top to open',
   tapToOpen: 'Tap to open',
   choosePack: 'Choose a pack',

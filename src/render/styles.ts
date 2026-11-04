@@ -18,6 +18,7 @@ background:var(--ao-bg);color:var(--ao-fg);overflow:hidden;touch-action:none;use
 .ao-btn--primary{background:var(--ao-accent);border-color:var(--ao-accent);color:var(--ao-on-accent,#1b1b2f);font-weight:600}
 .ao-btn:focus-visible,.ao-pack:focus-visible,.ao-stack:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .ao-skip{position:absolute;top:12px;right:12px;z-index:5;padding:6px 14px;font-size:13px}
+.ao-exit{position:absolute;top:max(12px,env(safe-area-inset-top));left:12px;z-index:6;padding:6px 14px;font-size:13px;background:rgba(8,8,20,.55)}
 
 .ao-pack{position:relative;height:min(70%,420px);aspect-ratio:var(--ao-pack-ratio,.72);cursor:grab;touch-action:none}
 .ao-pack__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
@@ -190,6 +191,28 @@ box-shadow:0 14px 28px rgba(0,0,0,.45);animation:ao-float 4.2s ease-in-out calc(
 @keyframes ao-shock{0%{opacity:.9;transform:scale(.2)}100%{opacity:0;transform:scale(3)}}
 .ao-summary .ao-tile{animation:ao-tile-in .5s cubic-bezier(.2,.9,.25,1.1) both;animation-delay:calc(var(--ao-i,0)*var(--ao-stagger,70ms))}
 @keyframes ao-tile-in{0%{opacity:0;transform:translateY(24px) scale(.85)}100%{opacity:1;transform:none}}
+
+/* Puerta de entrada: formulario previo a la experiencia (ver GateOptions) */
+.ao-root[data-ao-gate] .ao-skip{display:none}
+.ao-gate{position:absolute;left:50%;top:50%;translate:-50% -50%;z-index:3;display:flex;flex-direction:column;gap:14px;width:min(calc(100% - 32px),420px);max-height:calc(100% - 32px);overflow:auto;padding:24px;box-sizing:border-box;border-radius:calc(var(--ao-radius) + 4px);background:rgba(18,22,41,.82);border:1px solid rgba(255,255,255,.14);box-shadow:0 18px 48px rgba(0,0,0,.5);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);touch-action:auto;user-select:text;-webkit-user-select:text}
+.ao-gate__title{margin:0;font-size:20px;font-weight:700;line-height:1.2}
+.ao-gate__message{margin:0;font-size:14px;line-height:1.45;opacity:.85}
+.ao-gate__field{display:flex;flex-direction:column;gap:6px}
+.ao-gate__label{font-size:13px;font-weight:600}
+.ao-gate__input{appearance:none;width:100%;box-sizing:border-box;padding:11px 14px;border-radius:var(--ao-radius);border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.35);color:inherit;font:inherit;font-size:16px}
+.ao-gate__input:focus-visible{outline:3px solid var(--ao-accent);outline-offset:1px}
+.ao-gate__input[readonly]{opacity:.6}
+.ao-gate__field--check{display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:start}
+.ao-gate__check{width:20px;height:20px;margin:1px 0 0;accent-color:var(--ao-accent)}
+.ao-gate__check:focus-visible{outline:3px solid var(--ao-accent);outline-offset:2px}
+.ao-gate__field--check .ao-gate__label{font-weight:500;line-height:1.4}
+.ao-gate__field--check .ao-gate__links,.ao-gate__field--check .ao-gate__help{grid-column:2}
+.ao-gate__links{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px}
+.ao-gate__links a{color:var(--ao-accent);text-decoration:underline}
+.ao-gate__help{font-size:12px;opacity:.7;line-height:1.4}
+.ao-gate__error{margin:0;padding:9px 12px;border-radius:var(--ao-radius);background:rgba(248,113,113,.16);border:1px solid rgba(248,113,113,.5);font-size:13px;line-height:1.4}
+.ao-gate__actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.ao-gate__actions .ao-btn:disabled{opacity:.6;cursor:default}
 
 .ao-root[data-ao-reduced] *{animation:none!important;transition-duration:.01ms!important}
 `;

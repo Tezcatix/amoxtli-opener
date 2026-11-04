@@ -234,6 +234,11 @@ export interface UiOptions {
   hints?: boolean;
   /** Contador «n/N» bajo la pila de cartas. Def. true. */
   counter?: boolean;
+  /**
+   * Botón «Salir» arriba a la izquierda, visible en todas las fases (también en la puerta de entrada y la selección). Termina con `outcome: 'aborted'`;
+   * si el servidor ya había entregado las cartas, `result.cards` conserva las que se alcanzaron a ver. Def. false.
+   */
+  exitButton?: boolean;
 }
 
 /** Las etiquetas de texto fijo (todas salvo `announce`, que es una función). */
@@ -241,6 +246,8 @@ export type LabelKey = Exclude<keyof Labels, 'announce'>;
 
 export interface Labels {
   skip: string;
+  /** Botón «Salir» (`ui.exitButton`). */
+  exit: string;
   swipeToOpen: string;
   tapToOpen: string;
   choosePack: string;
@@ -274,6 +281,8 @@ export interface RedeemResult {
 export interface RedeemContext {
   /** 1 la primera vez; se incrementa en cada reintento. */
   attempt: number;
+  /** Lo que la persona escribió en la puerta de entrada (`options.gate`), por `name` de campo. `{}` si no hay puerta. */
+  gate: Record<string, string>;
   /** Se aborta si la instancia se destruye mientras la petición sigue en curso. */
   signal: AbortSignal;
 }
@@ -284,6 +293,62 @@ export interface RedeemContext {
  * así que el servidor debería ser idempotente: repetir el mismo `code` devuelve las mismas cartas.
  */
 export type RedeemFunction = (code: string, context: RedeemContext) => Promise<RedeemResult | CardInput[]>;
+
+/** Un campo de la puerta de entrada. */
+export interface GateField {
+  /** Clave con la que el valor llega a `validate` y a `redeem` (`context.gate[name]`). */
+  name: string;
+  label: string;
+  /**
+   * Tipo del `<input>`. Def. 'text'. Con 'checkbox' el campo es una casilla (por ejemplo, aceptar términos): su valor es `'true'` si está marcada y `''` si no, y
+   * si es obligatoria hay que marcarla.
+   */
+  type?: 'text' | 'email' | 'tel' | 'checkbox';
+  /** Si es obligatorio (def. true). Un campo obligatorio vacío (o una casilla sin marcar) no deja continuar. */
+  required?: boolean;
+  /** Mensaje cuando falta este campo; sustituye a `GateOptions.requiredMessage`. */
+  requiredMessage?: string;
+  /** Enlaces que se muestran junto a una casilla (los términos, el aviso de privacidad…). Se abren en otra pestaña. */
+  links?: Array<{ label: string; href: string }>;
+  placeholder?: string;
+  /** Texto de ayuda bajo el campo. */
+  help?: string;
+  maxLength?: number;
+  /** 'uppercase' pasa lo escrito a mayúsculas (útil para códigos). Def. 'none'. */
+  transform?: 'none' | 'uppercase';
+  /** Valor `autocomplete` del `<input>` (def. 'off'). */
+  autocomplete?: string;
+}
+
+/** Contexto que recibe `GateOptions.validate`. */
+export interface GateValidateContext {
+  /** Se aborta si se destruye el abridor mientras se valida. */
+  signal: AbortSignal;
+}
+
+/**
+ * Una puerta de entrada: un formulario que se muestra **antes** de la experiencia (selección, rasgado…) para pedir datos que el sitio necesita (un código de
+ * acceso, un nombre…). Nada de la experiencia aparece hasta que la persona lo completa y `validate` lo acepta; si se retira, `open()` termina con `outcome: 'aborted'`.
+ * Los valores llegan después a `redeem` en `context.gate`.
+ */
+export interface GateOptions {
+  fields: GateField[];
+  title?: string;
+  message?: string;
+  /** Texto del botón de continuar. Def. 'Continue'. */
+  submitLabel?: string;
+  /** Texto del botón de retirarse. Def. 'Cancel'. */
+  cancelLabel?: string;
+  /** Texto del botón mientras `validate` responde. Def. 'Checking…'. */
+  busyLabel?: string;
+  /** Mensaje cuando falta un campo obligatorio (`{label}` se sustituye por el nombre del campo). Def. 'Fill in: {label}'. */
+  requiredMessage?: string;
+  /**
+   * Comprueba lo escrito (por ejemplo, pregunta al servidor si el código sirve) sin gastar nada. Si rechaza o lanza, el mensaje del error se
+   * muestra en el formulario y la persona puede corregir; si resuelve, la experiencia empieza.
+   */
+  validate?: (values: Record<string, string>, context: GateValidateContext) => Promise<void> | void;
+}
 
 export interface PackOpenerOptions {
   mount: HTMLElement;
@@ -305,6 +370,8 @@ export interface PackOpenerOptions {
   /** Caja de la que salen los sobres al entrar el carrusel 3D (ver `PackBoxDefinition`). */
   box?: PackBoxDefinition;
   redeem: RedeemFunction;
+  /** Formulario previo a la experiencia (ver `GateOptions`). Sin él, la experiencia empieza directo. */
+  gate?: GateOptions;
   pack?: PackDefinition;
   /** width / height de las cartas (def. 0.716, formato póker). Cualquier formato: 1 = cuadrada, 1.5 = vertical alta… */
   cardAspectRatio?: number;
