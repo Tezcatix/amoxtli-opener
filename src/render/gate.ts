@@ -9,6 +9,21 @@ export interface GateHandle {
 
 const fieldId = (index: number, name: string): string => `ao-gate-${index}-${name.replace(/[^a-z0-9_-]/gi, '')}`;
 
+const SAFE_PROTOCOLS = ['http:', 'https:', 'mailto:', 'tel:'];
+
+/** Deja pasar solo rutas relativas y los esquemas http(s), mailto y tel: un `javascript:` o `data:` en un enlace se descarta. */
+export function isSafeHref(href: string): boolean {
+  const value = href.trim();
+  if (value === '' || /^(\/(?!\/)|\.{0,2}\/|[#?])/.test(value)) {
+    return true;
+  }
+  try {
+    return SAFE_PROTOCOLS.includes(new URL(value).protocol);
+  } catch {
+    return false;
+  }
+}
+
 const readValue = (field: GateField, input: HTMLInputElement): string => {
   if (field.type === 'checkbox') {
     return input.checked ? 'true' : '';
@@ -64,9 +79,10 @@ function buildField(doc: Document, field: GateField, index: number): { wrapper: 
     input.setAttribute('aria-required', 'true');
   }
   wrapper.append(...(checkbox ? [input, label] : [label, input]));
-  if (field.links?.length) {
+  const safeLinks = (field.links ?? []).filter((candidate) => isSafeHref(candidate.href));
+  if (safeLinks.length > 0) {
     const links = el(doc, 'span', 'ao-gate__links');
-    for (const link of field.links) {
+    for (const link of safeLinks) {
       const anchor = el(doc, 'a', undefined, { href: link.href, target: '_blank', rel: 'noopener noreferrer' });
       anchor.textContent = link.label;
       links.append(anchor);
@@ -158,7 +174,7 @@ export function runGate(doc: Document, root: HTMLElement, gate: GateOptions, sig
         input.focus();
         return;
       }
-      values[field.name] = value;
+      Object.defineProperty(values, field.name, { value, enumerable: true, writable: true, configurable: true });
     }
 
     if (!gate.validate) {

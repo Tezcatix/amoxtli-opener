@@ -273,3 +273,59 @@ describe('gate (puerta de entrada)', () => {
     opener.destroy();
   });
 });
+
+describe('seguridad de la puerta', () => {
+  it('descarta enlaces con esquemas peligrosos y deja los seguros', () => {
+    const opener = make({
+      gate: {
+        fields: [
+          {
+            name: 'terms',
+            label: 'Terms',
+            type: 'checkbox',
+            links: [
+              { label: 'xss', href: 'javascript:alert(1)' },
+              { label: 'xss2', href: ' JaVaScRiPt:alert(1)' },
+              { label: 'data', href: 'data:text/html,<script>1</script>' },
+              { label: 'ok', href: 'https://example.com/t' },
+              { label: 'rel', href: '/privacy' },
+            ],
+          },
+        ],
+      },
+    });
+    void opener.open();
+    const hrefs = Array.from(mount.querySelectorAll('.ao-gate__links a')).map((link) => link.getAttribute('href'));
+    expect(hrefs).toEqual(['https://example.com/t', '/privacy']);
+    opener.destroy();
+  });
+
+  it('no pinta la lista de enlaces si todos son peligrosos', () => {
+    const opener = make({
+      gate: { fields: [{ name: 'terms', label: 'Terms', type: 'checkbox', links: [{ label: 'x', href: 'javascript:alert(1)' }] }] },
+    });
+    void opener.open();
+    expect(mount.querySelector('.ao-gate__links')).toBeNull();
+    opener.destroy();
+  });
+
+  it('un campo llamado __proto__ no cambia el prototipo de los valores', async () => {
+    const seen: Array<Record<string, string>> = [];
+    const opener = make({
+      gate: {
+        fields: [{ name: '__proto__', label: 'Raro' }],
+        validate: (values) => {
+          seen.push(values);
+        },
+      },
+    });
+    void opener.open();
+    (mount.querySelector('.ao-gate input') as HTMLInputElement).value = 'polluted';
+    submit();
+    await vi.advanceTimersByTimeAsync(0);
+    const values = seen[0] ?? {};
+    expect(Object.getPrototypeOf(values)).toBe(Object.prototype);
+    expect(Object.keys(values)).toEqual(['__proto__']);
+    opener.destroy();
+  });
+});
