@@ -2,6 +2,15 @@
 
 Qué ve y qué hace la persona en cada fase. Las fases son las que reporta el evento `phase`: `idle → select → redeeming → tear → stack → fan → summary → done`. Con `flow.steps` puedes quitar pasos (por defecto: `tear`, `stack`, `fan`, `summary`; `select` se añade solo si hay varios sobres).
 
+## 0. Puerta de entrada (opcional)
+
+Solo si pasaste `gate`. Antes de cualquier otra cosa se muestra un formulario centrado, sobre el mismo fondo, con los campos que definiste (el primero ya enfocado). La fase sigue en `idle` y el botón «Saltar» no aparece.
+
+- **Continuar** (o Enter): revisa que estén los campos obligatorios, llama a `validate` (el botón muestra `busyLabel` y el formulario se bloquea) y, si todo está bien, empieza la experiencia. Si algo falla, el mensaje aparece en rojo bajo los campos y se puede corregir.
+- **Cancelar** o **Escape:** la persona se retira; `open()` termina con `outcome: 'aborted'`.
+
+El formulario es un `role="dialog"` y sus campos tienen etiqueta; los obligatorios llevan `aria-required`.
+
 ## 1. Selección (`select`)
 
 Solo si pasaste `packs`.
@@ -92,6 +101,10 @@ En la selección **no hay corte por deslizamiento** (en ninguna plataforma), par
 | Abanico | ← → cambiar de carta · Escape cierra la vista de cerca |
 
 El mantener presionado y el rasgado por deslizamiento son gestos de puntero; con teclado se usa Enter o Espacio.
+
+## Salir
+
+Con `ui.exitButton: true` hay un botón **Salir** fijo arriba a la izquierda en todas las fases: puerta de entrada, selección, rasgado, pila, abanico y resumen. Sin él, la persona solo puede salir con Escape o con los botones del resumen, y desde dentro no es evidente cómo; por eso se recomienda activarlo cuando la experiencia ocupa toda la pantalla. Salir termina con `outcome: 'aborted'` y no llama a `redeem` si todavía no se había rasgado el sobre; si el servidor ya había entregado las cartas, tu sitio debe mostrar lo que salió (la librería no lo hace al salir). También se puede salir por código con `opener.exit()`.
 
 ## Movimiento reducido y perfil bajo
 

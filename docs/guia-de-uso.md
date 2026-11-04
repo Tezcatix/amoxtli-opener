@@ -57,6 +57,40 @@ Mínimo `{ id, image }`. Opcionales:
 | `back` | Dorso propio de esa carta. |
 | `meta` | Datos tuyos; vuelven **intactos** en los eventos y el resultado. Ahí van tipo, número, etc. |
 
+## Pedir datos antes de entrar (`gate`)
+
+Si tu sitio necesita algo de la persona antes de mostrarle la experiencia (un **código de acceso**, su nombre, un correo), pasa `gate`: un formulario que sale primero, con el mismo aspecto que el resto. La selección y el sobre no aparecen hasta que lo completa.
+
+```ts
+createPackOpener({
+  /* … */
+  gate: {
+    title: 'Código de acceso',
+    message: 'Te lo dio quien creó la página.',
+    fields: [
+      { name: 'code', label: 'Código', transform: 'uppercase', maxLength: 16 },
+      { name: 'name', label: 'Tu nombre', required: false },
+    ],
+    submitLabel: 'Continuar',
+    cancelLabel: 'Cancelar',
+    validate: async (values, { signal }) => {
+      const res = await fetch('/api/packs/check', { method: 'POST', body: JSON.stringify(values), signal });
+      if (!res.ok) throw new Error((await res.json()).message);   // se muestra en el formulario
+    },
+  },
+  redeem: async (code, { gate }) => {
+    // gate.code y gate.name son lo que escribió la persona
+    const res = await fetch('/api/packs/open', { method: 'POST', body: JSON.stringify({ code, ...gate }) });
+    return res.json();
+  },
+});
+```
+
+- **Casillas:** un campo `type: 'checkbox'` (con `links` opcionales a los términos o al aviso de privacidad) sirve para pedir una aceptación; si es obligatoria hay que marcarla y llega a `redeem` como `'true'`.
+- **`validate`** sirve para avisar de un problema **antes** de que la persona rasgue el sobre (un código inválido, un dato que falta) sin gastar nada: es una comprobación, no la apertura. Si lanza un error, su mensaje aparece en el formulario y se puede corregir.
+- **`redeem` sigue siendo la fuente de verdad:** vuelve a validar todo y es lo que abre el sobre. Lo que se comprobó en `validate` puede haber cambiado entre una y otra.
+- Si la persona se retira, `open()` se resuelve con `outcome: 'aborted'` y `redeem` no se llama. Detalle de las opciones en la [referencia](referencia-api.md#gateoptions-y-gatefield).
+
 ## Qué efecto lleva cada carta
 
 Tú declaras la asociación en `tiers`. Se resume así:

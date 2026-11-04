@@ -64,6 +64,7 @@ Cómo está organizada la librería y las decisiones detrás.
 | Archivo | Qué hace |
 |---|---|
 | `opener.ts` | `createPackOpener`: orquesta las fases, el DOM y las interacciones. |
+| `gate.ts` | La puerta de entrada (`options.gate`): el formulario previo a la experiencia, con validación y sin tocar las fases. Se divide en `buildHeader` (título/mensaje), `buildField` (un campo) y `runGate` (envío, validación y cierre). Cada título lleva un `id` único (`ao-gate-title-N`) para que varias instancias en la página no choquen. |
 | `fan-view.ts`, `fan.ts` | El abanico: la vista (arrastre, vista de cerca) y su geometría. |
 | `carousel3d.ts` | El carrusel 3D de sobres con three.js: caja, anillo, rasgado sobre el sobre 3D, mantener presionado. |
 | `carousel3d-config.ts` | Los números del carrusel 3D (geometría, cámara, tiempos, intensidades), juntos. |
@@ -97,6 +98,7 @@ Cómo está organizada la librería y las decisiones detrás.
 
 ## Decisiones de diseño
 
+- **La puerta de entrada no es una fase.** `gate` se resuelve antes de que la sesión salga de `idle`: `opener.ts` abre el formulario (`gate.ts`), espera a que se complete y solo entonces arranca la experiencia. Así el núcleo (`session.ts`) no sabe de formularios; solo gana `cancelBeforeStart()` para terminar con `aborted` si la persona se retira. Lo escrito viaja a `redeem` en `context.gate`; la librería no lo interpreta.
 - **Las cartas no viajan por adelantado.** Se podrían leer en el inspector. La librería pide las cartas con `redeem` en el momento del rasgado y el servidor es la fuente de verdad; por eso `redeem` debe ser idempotente.
 - **La forma del sobre es de la librería.** Proporción y línea de corte son constantes (`PACK_TEMPLATE`), no opciones: así el sobre mide lo mismo siempre, el corte se pinta bien y nadie puede romperlo. Las imágenes se ajustan a la forma recortando, no al revés.
 - **Sin acoplamiento a ningún juego.** La rareza no es un enum de la librería: la defines tú con `tiers` (`field`, `values`, `keywords`, `when`) y la asociación es dinámica.

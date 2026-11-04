@@ -12,6 +12,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). L
 - **Documentación:** el borrador `docs/01-analisis-inputs-outputs.md` se reemplazó por la documentación nueva.
 
 ### Añadido
+- **Puerta de entrada, accesibilidad:** el título del formulario usa un `id` único por instancia (antes era fijo y se repetía con varios abridores); internamente `gate.ts` se separó en `buildHeader`, `buildField` y `runGate` sin cambiar el comportamiento.
+- **Botón «Salir» (`ui.exitButton`):** arriba a la izquierda y visible en todas las fases, también en la puerta de entrada y la selección; termina con `outcome: 'aborted'`. Nueva etiqueta `labels.exit` y método `opener.exit()`.
+- **`update({ actions })`:** reemplaza en caliente los botones del resumen (se leen al llegar a él), p. ej. para ofrecer «Abrir otro» solo si al servidor le quedan sobres.
+- **Puerta de entrada (`gate`):** un formulario previo a la experiencia para pedir datos que el sitio necesita (un código de acceso, un nombre…), con validación asíncrona (`validate`) que muestra su error en el formulario y sin gastar nada. Lo escrito llega a `redeem` en `context.gate` (nuevo campo de `RedeemContext`, `{}` si no hay puerta). Si la persona se retira, `open()` termina con `outcome: 'aborted'`. Los campos pueden ser de texto, correo, teléfono o casilla (`type: 'checkbox'`, con `links` y `requiredMessage` propios, para aceptar términos). Tipos `GateOptions`, `GateField` y `GateValidateContext`; `OpeningSession.cancelBeforeStart()`. Ver la [guía](docs/guia-de-uso.md#pedir-datos-antes-de-entrar-gate).
 - **Clasificación propia de cartas:** `tiers.field` (qué dato se clasifica: `'rarity'`, una ruta como `'meta.type'` o una función), y por nivel `values` (exactos), `keywords` y `when(card)`.
 - **Colores desde la imagen:** `effects.colorSource: 'image'` calcula el brillo de sobres y cartas con los colores dominante y secundario de su imagen. Helper `extractPalette`.
 - **Tiempos configurables:** opción `timing` (`holdToOpenMs`, `holdArmMs`, `lastCardHoldMs`, `summaryStaggerMs`, `packDropMs`, `flipMs` y `pace`).

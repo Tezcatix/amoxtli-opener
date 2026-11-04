@@ -18,6 +18,7 @@ Solo `mount` y `redeem` son obligatorios.
 |---|---|---|
 | `mount` | `HTMLElement` | **Requerida.** Contenedor donde se monta la experiencia. |
 | `redeem` | `RedeemFunction` | **Requerida.** Pide las cartas al servidor al rasgar el sobre. |
+| `gate` | `GateOptions` | Formulario previo a la experiencia para pedir datos (un código de acceso, un nombre…). Ver [`GateOptions`](#gateoptions-y-gatefield). |
 | `code` | `string` | Código del sobre (un solo sobre). Se abre directo. |
 | `packs` | `PackChoice[]` | Varios sobres a elegir; sustituye a `code`/`pack`. |
 | `pack` | `PackDefinition` | Apariencia del sobre. Con `packs`, es la base sobre la que se mezcla cada uno. |
@@ -41,9 +42,38 @@ Solo `mount` y `redeem` son obligatorios.
 
 ### `RedeemFunction`
 ```ts
-(code: string, context: { attempt: number; signal: AbortSignal }) => Promise<RedeemResult | CardInput[]>
+(code: string, context: { attempt: number; gate: Record<string, string>; signal: AbortSignal }) => Promise<RedeemResult | CardInput[]>
 ```
-`RedeemResult` es `{ cards: CardInput[]; packId?: string }`. `attempt` es 1 la primera vez y crece en cada reintento. `signal` se aborta si se destruye el abridor.
+`RedeemResult` es `{ cards: CardInput[]; packId?: string }`. `attempt` es 1 la primera vez y crece en cada reintento. `gate` trae lo que la persona escribió en la [puerta de entrada](#gateoptions-y-gatefield) (`{}` si no hay). `signal` se aborta si se destruye el abridor.
+
+### `GateOptions` y `GateField`
+Una **puerta de entrada**: un formulario que se muestra **antes** de la experiencia (selección, rasgado…) para pedir datos que tu sitio necesita. Nada de la experiencia aparece hasta que la persona lo completa y `validate` lo acepta. Los valores llegan después a `redeem` en `context.gate`.
+
+| `GateOptions` | Tipo | Descripción |
+|---|---|---|
+| `fields` | `GateField[]` | **Requerida.** Los campos del formulario. |
+| `title` | `string` | Título del formulario. |
+| `message` | `string` | Texto explicativo bajo el título. |
+| `submitLabel` | `string` | Botón de continuar. Def. `Continue`. |
+| `cancelLabel` | `string` | Botón de retirarse. Def. `Cancel`. |
+| `busyLabel` | `string` | Texto del botón mientras `validate` responde. Def. `Checking…`. |
+| `requiredMessage` | `string` | Aviso de campo obligatorio vacío; `{label}` se sustituye por el nombre del campo. Def. `Fill in: {label}`. |
+| `validate` | `(values, { signal }) => Promise<void> \| void` | Comprueba lo escrito sin gastar nada (por ejemplo, pregunta al servidor si el código sirve). Si rechaza o lanza, el mensaje del error se muestra en el formulario y la persona corrige; si resuelve, empieza la experiencia. |
+
+| `GateField` | Tipo | Descripción |
+|---|---|---|
+| `name` | `string` | **Requerida.** Clave del valor en `validate` y en `context.gate`. |
+| `label` | `string` | **Requerida.** Etiqueta del campo (se marca con `*` si es obligatorio). |
+| `type` | `'text' \| 'email' \| 'tel' \| 'checkbox'` | Tipo del `<input>`. Def. `text`. Con `checkbox` es una casilla (por ejemplo, aceptar términos): su valor es `'true'` si está marcada y `''` si no. |
+| `required` | `boolean` | Si es obligatorio. Def. `true`. Una casilla obligatoria hay que marcarla. |
+| `requiredMessage` | `string` | Aviso cuando falta este campo; sustituye al `requiredMessage` general. |
+| `links` | `{ label, href }[]` | Enlaces junto a una casilla (términos, aviso de privacidad…); se abren en otra pestaña. |
+| `placeholder`, `help` | `string` | Texto de ejemplo y ayuda bajo el campo. |
+| `maxLength` | `number` | Largo máximo. |
+| `transform` | `'none' \| 'uppercase'` | `uppercase` pasa lo escrito a mayúsculas (útil para códigos). |
+| `autocomplete` | `string` | Valor de `autocomplete`. Def. `off`. |
+
+Si la persona se retira (Cancelar o Escape) o se destruye el abridor con la puerta abierta, `open()` termina con `outcome: 'aborted'`, sin cartas, y `redeem` no se llama. Los textos por defecto están en inglés: pásalos en español (o el idioma que uses) en la propia `gate`, no en `labels`.
 
 ### `CardInput`
 | Campo | Tipo | Descripción |
@@ -114,7 +144,7 @@ Orden de decisión: `card.tier` → `tiers.resolve` → reglas por nivel (del m�
 `profile` (`'auto' | 'high' | 'low'`), `reducedMotion` (`'auto' | boolean`) y `colorSource` (`'manual' | 'image'`).
 
 ### `UiOptions`
-`hints` (textos de ayuda tenues) y `counter` (contador `n/N`); ambos `true` por defecto.
+`hints` (textos de ayuda tenues) y `counter` (contador `n/N`); ambos `true` por defecto. `exitButton` (`false` por defecto) agrega el botón **«Salir»** arriba a la izquierda, visible en todas las fases —también en la puerta de entrada y la selección—; al pulsarlo la experiencia termina con `outcome: 'aborted'`. Su texto es `labels.exit`.
 
 ### `TimingOptions`
 | Campo | Def. | Descripción |
@@ -143,7 +173,8 @@ Orden de decisión: `card.tier` → `tiers.resolve` → reglas por nivel (del m�
 | `open()` | Inicia la experiencia (salvo `flow.startPaused`) y devuelve una promesa con el [`OpenResult`](#resultado-openresult). Llamarlo de nuevo devuelve la misma promesa. |
 | `start()` | Inicia manualmente si usaste `startPaused`. |
 | `skip()` | Salta al resumen. |
-| `update({ audio?, labels? })` | Cambia en caliente el volumen (o silencia) y los textos; lo que ya está en pantalla se repinta. |
+| `exit()` | Sale de la experiencia en cualquier fase (lo mismo que el botón de `ui.exitButton`): cierra la puerta de entrada, cancela antes de empezar o aborta después; termina con `outcome: 'aborted'`. |
+| `update({ audio?, labels?, actions? })` | Cambia en caliente el volumen (o silencia), los textos y los botones del resumen; lo que ya está en pantalla se repinta. `actions` se lee al llegar al resumen: sirve para ofrecer «Abrir otro» solo si al servidor le quedan sobres. |
 | `getState()` | `{ phase, index }`: la fase actual y la carta en curso. |
 | `on(evento, fn)` / `off(evento, fn)` | Suscribe o quita un listener. |
 | `destroy()` | Cierra (`outcome: 'aborted'` si no había terminado) y limpia listeners, timers y DOM. |
@@ -187,6 +218,7 @@ Todas las claves de `Labels`. Se pasan en `options.labels` o `update({ labels })
 | Clave | Dónde se usa |
 |---|---|
 | `skip` | Botón «Saltar». |
+| `exit` | Botón «Salir» (`ui.exitButton`). |
 | `choosePack` | Estante 2D y `aria-label` del carrusel. |
 | `selectPack` | Aviso de arriba de la selección (clic elige, mantener abre). |
 | `swipeToOpen` | `aria-label` del sobre al rasgar. |
