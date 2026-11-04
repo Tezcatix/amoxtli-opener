@@ -252,6 +252,16 @@ export class OpeningSession {
     return this.finish(this.skipped ? 'skipped' : 'completed', id);
   }
 
+  /** La persona se retiró antes de empezar (por ejemplo, cerró la puerta de entrada): termina con `aborted` sin haber mostrado nada. */
+  cancelBeforeStart(): OpenResult | null {
+    if (this.currentPhase !== 'idle') {
+      return this.result;
+    }
+    this.started = true;
+    this.startedAt = this.clock();
+    return this.finish('aborted', null);
+  }
+
   /** Cierra sin acción (el host destruye el componente, o la persona cierra tras un error). */
   abort(): OpenResult | null {
     if (this.currentPhase === 'idle' || this.currentPhase === 'done') {
