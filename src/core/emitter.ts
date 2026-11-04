@@ -17,8 +17,21 @@ export class Emitter<Events extends { [K in keyof Events]: unknown }> {
     this.listeners.get(event)?.delete(listener as Listener<never>);
   }
 
+  /** Avisa a todos los oyentes. Si uno lanza, no frena a los demás ni a la máquina de estados: el error se relanza aparte para que siga visible. */
   emit<K extends keyof Events>(event: K, payload: Events[K]): void {
-    this.listeners.get(event)?.forEach((listener) => (listener as Listener<Events[K]>)(payload));
+    const set = this.listeners.get(event);
+    if (!set) {
+      return;
+    }
+    for (const listener of [...set]) {
+      try {
+        (listener as Listener<Events[K]>)(payload);
+      } catch (cause) {
+        setTimeout(() => {
+          throw cause;
+        }, 0);
+      }
+    }
   }
 
   clear(): void {
