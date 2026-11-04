@@ -23,6 +23,8 @@ import { defaultLabels } from './labels';
 import { createCarousel3D } from './carousel3d';
 import type { Carousel3D, Carousel3DHandlers } from './carousel3d';
 import { el } from './dom';
+import { runGate } from './gate';
+import type { GateHandle } from './gate';
 import type { Listen } from './dom';
 import { fanOrder, poseTransform, stowedPose } from './fan';
 import { renderFan as renderFanView } from './fan-view';
@@ -46,8 +48,15 @@ export interface PackOpener {
   open(): Promise<OpenResult>;
   start(): void;
   /** Cambia en caliente el volumen (o silencia) y los textos: lo que ya está en pantalla se repinta con los textos nuevos. */
-  update(options: { audio?: Pick<AudioOptions, 'enabled' | 'volume'>; labels?: Partial<Labels> }): void;
+  update(options: {
+    audio?: Pick<AudioOptions, 'enabled' | 'volume'>;
+    labels?: Partial<Labels>;
+    /** Reemplaza los botones del resumen (se leen al llegar a él), por ejemplo para ofrecer «Abrir otro» solo si al servidor le quedan sobres. */
+    actions?: ActionDefinition[];
+  }): void;
   skip(): void;
+  /** Sale de la experiencia en cualquier fase (lo mismo que el botón `ui.exitButton`): termina con `outcome: 'aborted'`. */
+  exit(): void;
   getState(): { phase: Phase; index: number };
   on: OpeningSession['events']['on'];
   off: OpeningSession['events']['off'];
@@ -113,7 +122,8 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
   let pack: PackDefinition = options.pack ?? {};
   let accent = accentOf(pack);
   let code = options.code ?? '';
-  const actions: ActionDefinition[] = options.actions ?? [
+  let customActions = options.actions !== undefined;
+  let actions: ActionDefinition[] = options.actions ?? [
     { id: 'collect', label: labels.collect, primary: true, closes: true },
   ];
 
@@ -161,6 +171,10 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
   const skipButton = el(doc, 'button', 'ao-btn ao-skip', { type: 'button' });
   bindText(skipButton, 'skip');
   skipButton.hidden = true;
+  const exitButton = options.ui?.exitButton ? el(doc, 'button', 'ao-btn ao-exit', { type: 'button' }) : null;
+  if (exitButton) {
+    bindText(exitButton, 'exit');
+  }
   const sparks = el(doc, 'div', 'ao-sparks', { 'aria-hidden': 'true' });
   if (!lowProfile) {
     for (let i = 0; i < SPARK_COUNT; i++) {
@@ -171,6 +185,9 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
   }
   const fxCanvas = el(doc, 'canvas', 'ao-fx', { 'aria-hidden': 'true' });
   root.append(sparks, stage, fxCanvas, live, skipButton);
+  if (exitButton) {
+    root.append(exitButton);
+  }
   mount.appendChild(root);
   const particles = lowProfile ? null : createParticles(fxCanvas, reduced);
 
@@ -355,6 +372,10 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
   const redeemAbort = new AbortController();
   let redeemAttempts = 0;
   let redeeming = false;
+  /** Lo que la persona escribió en la puerta de entrada (`options.gate`); llega a `redeem` en `context.gate`. */
+  let gateValues: Record<string, string> = {};
+  let gateHandle: GateHandle | null = null;
+  let gatePassed = false;
 
   /** Pide las cartas al servidor (una petición a la vez). Las cartas solo existen tras esta llamada. */
   const requestCards = (): void => {
@@ -365,7 +386,7 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
     session.clearError();
     const attempt = ++redeemAttempts;
     Promise.resolve()
-      .then(() => options.redeem(code, { attempt, signal: redeemAbort.signal }))
+      .then(() => options.redeem(code, { attempt, gate: gateValues, signal: redeemAbort.signal }))
       .then((response) => {
         if (destroyed) {
           return;
@@ -1329,7 +1350,7 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
         type: 'button',
         'data-ao-action': action.id,
       });
-      if (!options.actions && action.id === 'collect') {
+      if (!customActions && action.id === 'collect') {
         bindText(button, 'collect');
       } else {
         button.textContent = action.label;
@@ -1505,6 +1526,19 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
   });
   root.addEventListener('pointerdown', () => feedback.unlock(), { capture: true });
   skipButton.addEventListener('click', () => session.skip());
+  /** Sale en cualquier fase: con la puerta abierta la cierra; antes de empezar cancela; después aborta (con las cartas ya vistas). */
+  const exit = (): void => {
+    if (gateHandle) {
+      gateHandle.dispose();
+      return;
+    }
+    if (session.phase === 'idle') {
+      session.cancelBeforeStart();
+      return;
+    }
+    session.abort();
+  };
+  exitButton?.addEventListener('click', exit);
 
   const begin = (): void => {
     if (session.phase === 'idle' && !destroyed) {
@@ -1516,7 +1550,7 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
     }
   };
   /** Con `colorSource: 'image'` se leen antes los colores del arte de los sobres (con un tope de espera) para que el carrusel ya nazca teñido. */
-  const start = (): void => {
+  const startExperience = (): void => {
     const definitions = choices.length > 0 ? choices.map(choiceDefinition) : [pack];
     const arts = [options.pack?.art, ...choices.map((choice) => choice.art)].filter((art): art is string => Boolean(art));
     const jobs: Array<Promise<unknown>> = [];
@@ -1541,6 +1575,31 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
     void Promise.race([Promise.all(jobs), wait]).then(begin);
   };
 
+  /** Con `options.gate`, antes de empezar se pide el formulario de entrada; si la persona se retira, termina con `aborted` sin mostrar nada. */
+  const start = (): void => {
+    if (gateHandle || destroyed) {
+      return;
+    }
+    if (!options.gate || gatePassed || session.phase !== 'idle') {
+      startExperience();
+      return;
+    }
+    gateHandle = runGate(doc, root, options.gate, redeemAbort.signal);
+    void gateHandle.result.then((values) => {
+      gateHandle = null;
+      if (destroyed) {
+        return;
+      }
+      if (values === null) {
+        session.cancelBeforeStart();
+        return;
+      }
+      gateValues = values;
+      gatePassed = true;
+      startExperience();
+    });
+  };
+
   return {
     open() {
       if (!promise) {
@@ -1555,9 +1614,14 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
     },
     start,
     skip: () => session.skip(),
+    exit,
     getState: () => ({ phase: session.phase, index: session.index }),
     update: (next) => {
       feedback.update(next.audio ?? {});
+      if (next.actions) {
+        actions = next.actions;
+        customActions = true;
+      }
       if (next.labels) {
         Object.assign(labels, definedOnly(next.labels));
         refreshLabels();
@@ -1570,6 +1634,10 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
         return;
       }
       redeemAbort.abort();
+      if (gateHandle) {
+        gateHandle.dispose();
+        session.cancelBeforeStart();
+      }
       session.abort();
       feedback.dispose();
       tilt.dispose();

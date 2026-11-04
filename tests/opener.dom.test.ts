@@ -55,6 +55,28 @@ describe('createPackOpener (DOM)', () => {
     expect(actions).toEqual(['collect']);
   });
 
+  it('update({ actions }) cambia los botones del resumen y la acción elegida llega en el resultado', async () => {
+    const opener = createPackOpener({ mount, code: 'C1', redeem: async () => cards, tiers: generic5, flow: { tearMode: 'tap' } });
+    const done = opener.open();
+    (mount.querySelector('.ao-pack') as HTMLElement).click();
+    await vi.advanceTimersByTimeAsync(900);
+    opener.update({ actions: [{ id: 'again', label: 'Open another' }, { id: 'receipt', label: 'My receipt', primary: true }] });
+
+    (mount.querySelector('.ao-stack') as HTMLElement).click();
+    await vi.advanceTimersByTimeAsync(200);
+    (mount.querySelector('.ao-stack') as HTMLElement).click();
+    await vi.advanceTimersByTimeAsync(3600);
+    (mount.querySelector('.ao-btn--primary') as HTMLElement).click();
+
+    const buttons = Array.from(mount.querySelectorAll('.ao-actions .ao-btn')) as HTMLElement[];
+    expect(buttons.map((button) => button.textContent)).toEqual(['Open another', 'My receipt']);
+    expect(buttons[1]?.classList.contains('ao-btn--primary')).toBe(true);
+
+    buttons[0]?.click();
+    const result = await done;
+
+    expect(result.actionId).toBe('again');
+  });
   it('ui.hints y ui.counter en false marcan la raíz para ocultar ayudas y contador', () => {
     void createPackOpener({ mount, code: 'C1', redeem: async () => cards, tiers: generic5, ui: { hints: false, counter: false } }).open();
     const root = mount.querySelector('.ao-root') as HTMLElement;

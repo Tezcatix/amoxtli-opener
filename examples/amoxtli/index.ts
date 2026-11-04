@@ -16,6 +16,7 @@ export const amoxtliTheme: Record<string, string> = {
 /** Tono de marca: claro, conciso, sin exclamaciones ni jerga. */
 export const amoxtliLabels: Labels = {
   skip: 'Saltar',
+  exit: 'Salir',
   swipeToOpen: 'Desliza por la parte de arriba para abrir',
   tapToOpen: 'Toca para abrir',
   choosePack: 'Elige tu sobre',
