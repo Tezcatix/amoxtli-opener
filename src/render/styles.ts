@@ -17,7 +17,7 @@ background:var(--ao-bg);color:var(--ao-fg);overflow:hidden;touch-action:none;use
 .ao-btn.ao-fan-next{position:absolute;left:50%;bottom:calc(max(24px,env(safe-area-inset-bottom)) + 8px);translate:-50% 0}
 .ao-btn--primary{background:var(--ao-accent);border-color:var(--ao-accent);color:var(--ao-on-accent,#1b1b2f);font-weight:600}
 .ao-btn:focus-visible,.ao-pack:focus-visible,.ao-stack:focus-visible{outline:3px solid #fff;outline-offset:3px}
-.ao-skip{position:absolute;top:12px;right:12px;z-index:5;padding:6px 14px;font-size:13px}
+.ao-skip{position:absolute;top:max(12px,env(safe-area-inset-top));right:12px;z-index:6;padding:6px 14px;font-size:13px;background:rgba(8,8,20,.55)}
 .ao-exit{position:absolute;top:max(12px,env(safe-area-inset-top));left:12px;z-index:6;padding:6px 14px;font-size:13px;background:rgba(8,8,20,.55)}
 
 .ao-pack{position:relative;height:min(70%,420px);aspect-ratio:var(--ao-pack-ratio,.72);cursor:grab;touch-action:none}
