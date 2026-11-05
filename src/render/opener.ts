@@ -123,10 +123,11 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
   let pack: PackDefinition = options.pack ?? {};
   let accent = accentOf(pack);
   let code = options.code ?? '';
-  let customActions = options.actions !== undefined;
-  let actions: ActionDefinition[] = options.actions ?? [
+  const defaultActions: ActionDefinition[] = [
     { id: 'collect', label: labels.collect, primary: true, closes: true },
   ];
+  /** Los botones del resumen que definió quien integra la librería (en `options` o con `update({ actions })`); sin ellos, el de reserva. */
+  let hostActions: ActionDefinition[] | null = options.actions ?? null;
 
   const session = createOpeningSession({
     tiers,
@@ -1347,12 +1348,12 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
       stage.appendChild(info);
     }
     const bar = el(doc, 'div', 'ao-actions');
-    actions.forEach((action) => {
+    (hostActions ?? defaultActions).forEach((action) => {
       const button = el(doc, 'button', `ao-btn${action.primary ? ' ao-btn--primary' : ''}`, {
         type: 'button',
         'data-ao-action': action.id,
       });
-      if (!customActions && action.id === 'collect') {
+      if (hostActions === null && action.id === 'collect') {
         bindText(button, 'collect');
       } else {
         button.textContent = action.label;
@@ -1621,8 +1622,7 @@ export function createPackOpener(options: PackOpenerOptions): PackOpener {
     update: (next) => {
       feedback.update(next.audio ?? {});
       if (next.actions) {
-        actions = next.actions;
-        customActions = true;
+        hostActions = next.actions;
       }
       if (next.labels) {
         Object.assign(labels, definedOnly(next.labels));
